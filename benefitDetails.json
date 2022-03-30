@@ -1,10 +1,22 @@
 [
     {
         "id": 1,
-        "name": "Lifestyle & Travel"
+        "name": "Lifestyle"
     },
     {
         "id": 2,
-        "name": "Dining & Movies"
+        "name": "Dining"
+    },
+    {
+        "id": 3,
+        "name": "Movies"
+    },
+    {
+        "id": 4,
+        "name": "Shipping"
+    },
+    {
+        "id": 5,
+        "name": "Travel"
     }
 ]
