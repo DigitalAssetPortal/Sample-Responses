@@ -1,0 +1,62 @@
+[
+    {
+        "productName": "PVR Platinum",
+        "productCode": "PVRP",
+        "status": "Active",
+        "gender": "All",
+        "minEligibleStatedIncome": 40000,
+        "maxEligibleStatedIncome": 100000,
+        "minEligibleCreditLimit": 20000,
+        "maxEligibleCreditLimit": 100000,
+        "preferenceDetails": [
+            {
+                "id": 1,
+                "name": "Lifestyle & Travel"
+            },
+            {
+                "id": 2,
+                "name": "Dining & Movies"
+            }
+        ]
+    },
+    {
+        "productName": "INOX",
+        "productCode": "INOX",
+        "status": "Active",
+        "gender": "All",
+        "minEligibleStatedIncome": 60000,
+        "maxEligibleStatedIncome": 120000,
+        "minEligibleCreditLimit": 40000,
+        "maxEligibleCreditLimit": 110000,
+        "preferenceDetails": [
+            {
+                "id": 1,
+                "name": "Lifestyle & Travel"
+            },
+            {
+                "id": 2,
+                "name": "Dining & Movies"
+            }
+        ]
+    },
+    {
+        "productName": "Zomato",
+        "productCode": "ZOM",
+        "status": "Active",
+        "gender": "All",
+        "minEligibleStatedIncome": 10000,
+        "maxEligibleStatedIncome": 50000,
+        "minEligibleCreditLimit": 5000,
+        "maxEligibleCreditLimit": 10000,
+        "preferenceDetails": [
+            {
+                "id": 1,
+                "name": "Lifestyle & Travel"
+            },
+            {
+                "id": 2,
+                "name": "Dining & Movies"
+            }
+        ]
+    }
+]
