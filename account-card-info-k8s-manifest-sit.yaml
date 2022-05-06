@@ -1,0 +1,135 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: account-card-info-api-configmap
+  namespace: account-card-info-sit
+data:
+  NODE_ENV: sit
+  APP_PROTOCOL: http
+  APP_HOST: 127.0.0.1
+  APP_PORT: "3010"
+  APP_NAME: account-card-info
+  DATABASE_USER: xxxxx # todo add usernmae
+  DATABASE_PASSWORD: XXXX # todo add password
+  DATABASE_HOST: rac-scan.rblbank.com
+  DATABASE_PORT: "1521"
+  DATABASE_NAME: CMNUAT
+  USE_DATABASE: dmcc
+  ENABLE_ERROR_STACK: "false"
+  REDIS_HOST: rbl-uat-api-cache # copy paste the host
+  REDIS_PORT: "6379"
+  CACHE_TTL: "300"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: account-card-info-api
+  namespace: account-card-info-sit
+spec:
+  selector:
+    matchLabels:
+      app: account-card-info-api
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: account-card-info-api
+    spec:
+      containers:
+      - name: account-card-info-api
+        image: "" #Todo add the ECR image name
+        envFrom:
+        - configMapRef:
+            name: account-card-info-api-configmap
+        ports:
+        - containerPort: 3010
+        resources:
+          requests:
+            memory: 400M
+            cpu: 100m
+          limits:
+            memory: 500M
+            cpu: 400
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3010
+          initialDelaySeconds: 3
+          periodSeconds: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 3010
+          initialDelaySeconds: 3
+          periodSeconds: 3
+        volumeMounts:
+        - mountPath: "/opt/"
+          name: oracle-client
+          readOnly: true
+        - mountPath: "/applogs"
+          subPath: "applogs"
+          name: oracle-client
+          readOnly: false
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: account-card-info-api-svc
+  namespace: account-card-info-sit
+  labels:
+    svc: account-card-info-api-svc
+  spec:
+    ports:
+      - name: http-api-port
+        port: 3010
+    selector: 
+      app: account-card-info-api
+    type: ClusterIP
+---
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: account-card-info-api-hpa
+  namespace: account-card-info-sit
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: account-card-info-api
+  minReplicas: 1
+  maxReplicas: 2
+  metrics:
+    - type: Resource
+      resources:
+        name: cpu
+        target: 
+          type: Utilization
+          averageUtilization: 60
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 900
+      policies:
+        - type: Pods
+          value: 4
+          periodSeconds: 300
+        - type: Percent
+          value: 30
+          periodSeconds: 300
+      selectPolicy: Min
+    scaleUp:
+      stabilizationWindowSeconds: 10
+      policies:
+        - type: Pods
+          value: 4
+          periodSeconds: 15
+        - type: Percent
+          value: 100
+          periodSeconds: 15
+      selectPolicy: Max
+
+
+
+
